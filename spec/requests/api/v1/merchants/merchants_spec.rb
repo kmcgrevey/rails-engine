@@ -61,9 +61,9 @@ RSpec.describe 'Merchants API Endpoints', type: :request do
   end
 
   describe 'returns a list of a Merchants items' do
-    let(:item1) { create(:item, merchant_id: merch1.id) }
-    let(:item2) { create(:item, merchant_id: merch2.id) }
-    let(:item3) { create(:item, merchant_id: merch2.id) }
+    let!(:item1) { create(:item, merchant_id: merch1.id) }
+    let!(:item2) { create(:item, merchant_id: merch2.id) }
+    let!(:item3) { create(:item, merchant_id: merch2.id) }
     
     subject { get "/api/v1/merchants/#{merch2.id}/items" }
 
@@ -71,6 +71,12 @@ RSpec.describe 'Merchants API Endpoints', type: :request do
 
     it 'with a successful response' do
       expect(response).to be_successful
+    end
+
+    it 'only returns its own items' do
+      expect(json_data.length).to eq(2)
+      expect(json_data.first[:id]).not_to eq(item1.id.to_s)
+      expect(json_data.last[:id]).not_to eq(item1.id.to_s)
     end
   end
 
