@@ -63,4 +63,38 @@ RSpec.describe 'Items API Endpoints', type: :request do
     end
   end
 
+  describe 'creates an Item' do
+    let(:merchant) { create(:merchant) }
+
+    context "when valid attributes sent" do
+      let(:valid_attributes) do
+        {
+          name: "Item Test",
+          description: "This is an item description",
+          unit_price: 10.99,
+          merchant_id: "#{merchant.id}"
+        }
+      end
+
+      subject { post "/api/v1/items", params: valid_attributes }
+
+      it 'with a successful response' do
+        subject
+        expect(response).to be_successful
+      end
+
+      it "creates a new Item" do
+        expect { subject }.to change(Item, :count).by(1)
+      end
+
+      it "renders a proper JSON response" do
+        subject
+        expect(json_data[:attributes][:name]).to eq("Item Test")
+        expect(json_data[:attributes][:description]).to eq("This is an item description")
+        expect(json_data[:attributes][:unit_price]).to eq(10.99)
+        expect(json_data[:attributes][:merchant_id]).to eq(merchant.id)
+      end
+    end
+  end
+
 end
