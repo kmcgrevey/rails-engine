@@ -127,6 +127,29 @@ RSpec.describe 'Items API Endpoints', type: :request do
       expect(json_data[:attributes][:description]).to eq("This is a REVISED item description")
       expect(json_data[:attributes][:unit_price]).to eq(20.25)
     end
+  end
+
+  describe 'deletes an Item' do
+    let!(:item) { create(:item) }
+    let!(:items) { create_list(:item, 2) }
+
+    subject { delete "/api/v1/items/#{item.id}"}
+
+    it 'with a successful response' do
+      subject
+      expect(response).to be_successful
+    end
+
+    it "should have empty JSON body" do
+      subject
+      expect(response.body).to be_blank
+    end
+    
+    it "cremoves the Item" do
+      expect { subject }.to change(Item, :count).by(-1)
+      expect(Item.first[:id]).not_to eq(item.id)
+      expect(Item.last[:id]).to eq(items.last.id)
+    end
 
   end
 
