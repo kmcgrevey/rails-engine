@@ -97,4 +97,37 @@ RSpec.describe 'Items API Endpoints', type: :request do
     end
   end
 
+  describe 'edits an Item' do
+    let(:attributes) do
+      {
+        name: "Item Test",
+        description: "This is an item description",
+        unit_price: 10.99
+      }
+    end
+    let(:updated_attributes) do
+      {
+        name: "Item Updated",
+        description: "This is a REVISED item description",
+        unit_price: 20.25
+      }
+    end
+    let(:item) { create(:item, attributes) }
+
+    subject { put "/api/v1/items/#{item.id}", params: updated_attributes }
+
+    it 'with a successful response' do
+      subject
+      expect(response).to be_successful
+    end
+
+    it "with updated params" do
+      subject
+      expect(json_data[:attributes][:name]).to eq("Item Updated")
+      expect(json_data[:attributes][:description]).to eq("This is a REVISED item description")
+      expect(json_data[:attributes][:unit_price]).to eq(20.25)
+    end
+
+  end
+
 end
