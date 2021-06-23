@@ -80,7 +80,7 @@ RSpec.describe 'Items API Endpoints', type: :request do
 
       it 'with a successful response' do
         subject
-        expect(response).to be_successful
+        expect(response).to have_http_status(201)
       end
 
       it "creates a new Item" do
