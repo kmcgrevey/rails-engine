@@ -150,7 +150,26 @@ RSpec.describe 'Items API Endpoints', type: :request do
       expect(Item.first[:id]).not_to eq(item.id)
       expect(Item.last[:id]).to eq(items.last.id)
     end
+  end
 
+  describe 'returns the Merchant belonging to the Item' do
+    let(:merch1) { create(:merchant) }
+    let(:merch2) { create(:merchant) }
+    let!(:item1) { create(:item, merchant_id: merch1.id) }
+    let!(:item2) { create(:item, merchant_id: merch2.id) }
+    
+    subject { get "/api/v1/items/#{item2.id}/merchant" }
+
+    before { subject }
+
+    it 'with a successful response' do
+      expect(response).to be_successful
+    end
+
+    it 'only returns its own Merchant' do
+      expect(json_data.class).to eq(Hash)
+      expect(json_data[:id]).to eq(merch2.id.to_s)
+    end
   end
 
 end
