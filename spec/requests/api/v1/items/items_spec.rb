@@ -127,6 +127,29 @@ RSpec.describe 'Items API Endpoints', type: :request do
       expect(json_data[:attributes][:description]).to eq("This is a REVISED item description")
       expect(json_data[:attributes][:unit_price]).to eq(20.25)
     end
+
+    context "with invalid parameters" do
+      let(:invalid_params) do
+        {
+          name: "Item Updated",
+          description: "This is a REVISED item description",
+          unit_price: 20.25,
+          merchant_id: 99999999
+        }
+      end
+
+      subject { put "/api/v1/items/#{item.id}", params: invalid_params }
+
+      it "should return 404 status code" do
+        subject
+        expect(response).to have_http_status(:not_found)
+      end
+      
+      it "does not update the Item" do
+        subject
+        expect(item.name).to eq(attributes[:name])
+      end
+    end
   end
 
   describe 'deletes an Item' do
