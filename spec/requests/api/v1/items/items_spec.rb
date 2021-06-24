@@ -78,9 +78,9 @@ RSpec.describe 'Items API Endpoints', type: :request do
 
       subject { post "/api/v1/items", params: valid_attributes }
 
-      it 'with a successful response' do
+      it 'with a successful 201 response' do
         subject
-        expect(response).to have_http_status(201)
+        expect(response).to have_http_status(:created)
       end
 
       it "creates a new Item" do
@@ -168,7 +168,7 @@ RSpec.describe 'Items API Endpoints', type: :request do
       expect(response.body).to be_blank
     end
     
-    it "cremoves the Item" do
+    it "removes the Item" do
       expect { subject }.to change(Item, :count).by(-1)
       expect(Item.first[:id]).not_to eq(item.id)
       expect(Item.last[:id]).to eq(items.last.id)
