@@ -7,17 +7,17 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
                  .first
     end
     if params[:max_price] && params[:min_price]
-      item = Item.where('unit_price >= ? AND unit_price <=?', params[:min_price].to_i, params[:max_price])
+      item = Item.where('unit_price >= ? AND unit_price <=?', params[:min_price].to_f, params[:max_price])
                  .order(:name)
                  .first
     end
     if params[:min_price]
-      item = Item.where('unit_price >= ?', params[:min_price].to_i)
+      item = Item.where('unit_price >= ?', params[:min_price].to_f)
                  .order(:name)
                  .first
     end
     if params[:max_price]
-      item = Item.where('unit_price <= ?', params[:max_price].to_i)
+      item = Item.where('unit_price <= ?', params[:max_price].to_f)
                  .order(:name)
                  .first
     end
