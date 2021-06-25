@@ -12,7 +12,7 @@ RSpec.describe 'Single Item search endpoint', type: :request do
   
   describe 'returns Item using name query' do
     context 'with valid params' do
-      let(:valid_name_param) { 'name=ring'}
+      let(:valid_name_param) { 'name=ring' }
 
       subject { get '/api/v1/items/find', params: valid_name_param}
 
@@ -31,7 +31,7 @@ RSpec.describe 'Single Item search endpoint', type: :request do
   
   describe 'returns Item using min_price query' do
     context 'with valid params' do
-      let(:valid_price_param) { 'min_price=40'}
+      let(:valid_price_param) { 'min_price=40' }
 
       subject { get '/api/v1/items/find', params: valid_price_param}
 
@@ -51,7 +51,7 @@ RSpec.describe 'Single Item search endpoint', type: :request do
   
   describe 'returns Item using max_price query' do
     context 'with valid params' do
-      let(:valid_price_param) { 'max_price=30'}
+      let(:valid_price_param) { 'max_price=30' }
 
       subject { get '/api/v1/items/find', params: valid_price_param}
 
@@ -65,6 +65,26 @@ RSpec.describe 'Single Item search endpoint', type: :request do
         expect(json_data.class).to eq(Hash)
         expect(json_data[:id]).to eq(item1.id.to_s)
         expect(json_data[:attributes][:unit_price]).to eq(item1.unit_price)
+      end
+    end
+  end
+  
+  describe 'returns Item using min_price and max_price query' do
+    context 'with valid params' do
+      let(:valid_price_param) { 'max_price=60&min_price=30' }
+
+      subject { get '/api/v1/items/find', params: valid_price_param}
+
+      it 'has a successful 200 response' do
+        subject
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'is the first record in alphabtical order' do
+        subject
+        expect(json_data.class).to eq(Hash)
+        expect(json_data[:id]).to eq(item4.id.to_s)
+        expect(json_data[:attributes][:unit_price]).to eq(item4.unit_price)
       end
     end
   end
