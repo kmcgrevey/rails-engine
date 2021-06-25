@@ -6,4 +6,10 @@ class Item < ApplicationRecord
     .order(:name)
   end
 
+  def self.min_price_finder(price)
+    where('unit_price >= ?', price.to_f)
+    .order(:name)
+  end
+
+
 end

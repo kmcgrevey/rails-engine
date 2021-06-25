@@ -48,4 +48,25 @@ RSpec.describe 'All Item search endpoint', type: :request do
     end
   end
 
+  describe 'returns Items using min_price query' do
+    context 'with valid params' do
+      let(:valid_price_param) { 'min_price=40' }
+
+      subject { get '/api/v1/items/find_all', params: valid_price_param}
+
+      it 'has a successful 200 response' do
+        subject
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'as a list in alphabtical order' do
+        subject
+        expect(json_data.class).to eq(Array)
+        expect(json_data.length).to eq(3)
+        expect(json_data.first[:id]).to eq(item4.id.to_s)
+        expect(json_data.last[:id]).to eq(item2.id.to_s)
+      end
+    end
+  end
+
 end

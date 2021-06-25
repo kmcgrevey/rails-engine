@@ -33,6 +33,9 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
     if params[:name]
       item = Item.name_finder(params[:name])
     end
+    if params[:min_price]
+      item = Item.min_price_finder(params[:min_price])
+    end
 
     if item
       render json: serializer.new(item)
