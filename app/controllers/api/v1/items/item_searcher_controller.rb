@@ -2,20 +2,19 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
 
   def show
     if params[:name]
-      item = Item.where('lower(name) LIKE ?', "%#{params[:name].downcase}%")
-                 .order(:name)
-                 .first
+      item = Item.name_finder(params[:name]).first
     end
+
     if params[:max_price] && params[:min_price]
       item = Item.where('unit_price >= ? AND unit_price <=?', params[:min_price].to_f, params[:max_price])
                  .order(:name)
                  .first
     end
+
     if params[:min_price]
-      item = Item.where('unit_price >= ?', params[:min_price].to_f)
-                 .order(:name)
-                 .first
+      item = Item.min_price_finder(params[:min_price]).first
     end
+
     if params[:max_price]
       item = Item.where('unit_price <= ?', params[:max_price].to_f)
                  .order(:name)
@@ -33,6 +32,7 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
     if params[:name]
       item = Item.name_finder(params[:name])
     end
+    
     if params[:min_price]
       item = Item.min_price_finder(params[:min_price])
     end
