@@ -10,8 +10,18 @@ class Api::V1::Merchants::MerchantSearcherController < ApplicationController
     else
       render json: {"data": {}}, status: 200
     end
+  end
 
+  def index
+    if params[:name]
+      merchants = Merchant.name_finder(params[:name])
+    end
 
+    if merchants
+      render json: serializer.new(merchants)
+    else
+      render json: {"data": []}, status: 200
+    end
   end
 
   def serializer
