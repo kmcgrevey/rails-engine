@@ -29,6 +29,18 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
     end
   end
 
+  def index
+    if params[:name]
+      item = Item.name_finder(params[:name])
+    end
+
+    if item
+      render json: serializer.new(item)
+    else
+      render json: {"data": []}, status: 200
+    end
+  end
+
   def serializer
     ItemSerializer
   end
