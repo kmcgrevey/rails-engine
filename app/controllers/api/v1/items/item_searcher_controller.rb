@@ -24,6 +24,8 @@ class Api::V1::Items::ItemSearcherController < ApplicationController
 
     if item
       render json: serializer.new(item)
+    else
+      render json: {"data": {}}, status: 200
     end
   end
 

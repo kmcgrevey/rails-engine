@@ -27,6 +27,23 @@ RSpec.describe 'Single Item search endpoint', type: :request do
         expect(json_data[:id]).to eq(item3.id.to_s)
       end
     end
+
+    context 'with invalid params' do
+      let(:invalid_name_param) { 'name=NOMATCH' }
+
+      subject { get '/api/v1/items/find', params: invalid_name_param}
+
+      it 'has a successful 200 response' do
+        subject
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns a valid JSON formatted response' do
+        subject
+        expect(json_data.class).to eq(Hash)
+        expect(json_data.length).to eq(0)
+      end
+    end
   end
   
   describe 'returns Item using min_price query' do
