@@ -106,4 +106,35 @@ RSpec.describe 'Single Item search endpoint', type: :request do
     end
   end
 
+  describe 'returns an error for invalid query combos' do
+    subject { get '/api/v1/items/find', params: invalid_combo }
+    
+    context 'name & min_price' do
+      let(:invalid_combo)  { 'min_price=30&name=ring' }
+      
+      it 'has a 400 response' do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    
+    context 'name & max_price' do
+      let(:invalid_combo)  { 'name=ring&max_price=30' }
+      
+      it 'has a 400 response' do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    
+    context 'max_price & min_price & name' do
+      let(:invalid_combo)  { 'min_price=10&name=ring&max_price=30' }
+      
+      it 'has a 400 response' do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
 end
