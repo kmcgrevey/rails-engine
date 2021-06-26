@@ -64,6 +64,16 @@ RSpec.describe 'Single Item search endpoint', type: :request do
         expect(json_data[:attributes][:unit_price]).to eq(item4.unit_price)
       end
     end
+
+    context 'with invalid params' do
+      let(:invalid_price_param) { 'min_price=-5' }
+
+      it 'has a 400 response' do
+        get '/api/v1/items/find', params: invalid_price_param
+        
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
   end
   
   describe 'returns Item using max_price query' do

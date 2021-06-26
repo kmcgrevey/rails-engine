@@ -1,5 +1,6 @@
 class Api::V1::Items::ItemSearcherController < ApplicationController
   before_action :validate_name, only: [:show]
+  before_action :validate_price, only: [:show]
 
   def show
     if params[:name]

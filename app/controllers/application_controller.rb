@@ -9,4 +9,11 @@ class ApplicationController < ActionController::API
       render status: 400 and return
     end
   end
+
+  def validate_price
+    if params[:min_price].to_f < 0
+
+      render status: 400 and return
+    end
+  end
 end
