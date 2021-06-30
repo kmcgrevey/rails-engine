@@ -25,13 +25,38 @@ RSpec.describe 'Merchant with Most Revenue endpoint', type: :request do
     expect(json_data.length).to eq(3)
 
     get '/api/v1/revenue/merchants?quantity=1'
+
     expect(json_data.length).to eq(1)
   end
   
   context 'if quantity is greater than total count' do
     it 'will return all possible' do
       get '/api/v1/revenue/merchants?quantity=9'
+
       expect(json_data.length).to eq(5)
+    end
+  end
+
+  context 'with invalid params' do
+    it 'returns 400 error for missing quantity param' do
+      get '/api/v1/revenue/merchants'
+
+      expect(response).to have_http_status(:bad_request)
+      expect(json_body[:error]).to eq('bad or missing param')
+    end
+    
+    it 'returns 400 error for missing quantity value' do
+      get '/api/v1/revenue/merchants?quantity='
+
+      expect(response).to have_http_status(:bad_request)
+      expect(json_body[:error]).to eq('bad or missing param')
+    end
+    
+    it 'returns 400 error for a non-integer quantity value' do
+      get '/api/v1/revenue/merchants?quantity=F00bAr'
+
+      expect(response).to have_http_status(:bad_request)
+      expect(json_body[:error]).to eq('bad or missing param')
     end
   end
 
