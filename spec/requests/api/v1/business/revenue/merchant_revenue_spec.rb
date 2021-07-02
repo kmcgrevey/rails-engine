@@ -30,4 +30,10 @@ RSpec.describe 'Merchant Revenue endpoint', type: :request do
     expect(json_data[:attributes][:revenue]).to eq(rev)
   end
 
+  it 'returns 404 error bad id integer' do
+    get '/api/v1/revenue/merchants/999999999'
+    
+    expect(response).to have_http_status(:not_found)
+  end
+
 end
