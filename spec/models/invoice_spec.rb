@@ -29,8 +29,8 @@ RSpec.describe Invoice, type: :model do
       potential = Invoice.potential_rev
 
       expect(potential.length).to eq(2)
-      expect(potential.first.revenue).to eq(10.00)
-      expect(potential.last.revenue).to eq(1000.00)
+      expect(potential.first.revenue).to eq(1000.00)
+      expect(potential.last.revenue).to eq(10.00)
     end
   end
 
